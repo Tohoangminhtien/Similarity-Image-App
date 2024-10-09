@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Images Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cropper.min.css') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/icon.ico') }}">
+</head>
+
+<body>
+    <section class="search-section">
+        <div class="query-container" id="query-container">
+            {% if is_show %}
+            <img id="queryImage" src="{{ url_for('static', filename='img/last_image_query.jpg') }}" alt="">
+            {% else %}
+            <img id="queryImage" alt="">
+            {% endif %}
+        </div>
+
+        <div class="container" id="container">
+            <h1>IMAGES SEARCH</h1>
+            <h2>{{ notification }}</h2>
+            <form action="/" method="post" enctype="multipart/form-data">
+                <input type="url" name="url-query" id="url-query" placeholder="Enter URL"
+                    style="padding: 10px; border: 1px solid #ddd;border-radius: 4px;margin-bottom: 10px;">
+                <input type="file" id="imageInput" name="image" accept="image/*">
+                <input type="hidden" id="hidden-numquery" name="hidden-numquery">
+                <input type="hidden" id="imgbase64" name="imgbase64">
+                <input type="button" value="Crop" id="cropActive">
+                <input type="submit" value="Search" id="submitBtn">
+            </form>
+        </div>
+
+        <div class="option-container" id="option-container">
+            <h1>Option</h1>
+            <form action="/">
+                <div class="form-group">
+                    <label for="engine">Search engine</label>
+                    <select name="engine" id="engine"
+                        style="padding: 10px; border: 1px solid #ddd;border-radius: 4px;margin-bottom: 10px; width: 94%;">
+                        <option value="ViT">ViT</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numquery">Number Query</label>
+                    <input type="text" name="numquery" id="numquery" placeholder="100"
+                        style="padding: 10px; border: 1px solid #ddd;border-radius: 4px;margin-bottom: 10px; width: 94%;">
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <section class="results-section">
+        <div class="grid-container">
+            {% for url, describe, distance, price in products_data %}
+            <div class="grid-item">
+                <img src="{{ url }}" alt="{{ describe }}" onclick="showDescribe(this)">
+                <div class="caption">Similar score: {{ distance }}</div>
+                <div class="describeDiv">
+                    <div class="describeContent">
+                        <img src="{{ url }}" alt="{{ describe }}">
+                        <ul class="custom-list">
+                            <li>
+                                <h3>Similar score: {{ distance }}</h3>
+                            </li>
+                            <li>
+                                <h4><b>Description: {{ describe }}</b></h4>
+                            </li>
+                            <li>
+                                <h4>Price: {{ price }} $</h4>
+                            </li>
+                        </ul>
+                        <button class="closeBtn" onclick="closeDescribe(this)">Close</button>
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </section>
+
+    <script>
+        let cropper;
+        document.getElementById('cropActive').addEventListener('click', function () {
+            const image = document.getElementById('queryImage');
+            if (cropper) {
+                cropper.destroy();
+            }
+            cropper = new Cropper(image, {
+                aspectRatio: 0,
+                viewMode: 0
+            });
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function () {
+            var numquery = document.getElementById('numquery').value;
+            if (numquery.trim() === '') {
+                numquery = '100';
+            }
+            document.getElementById('hidden-numquery').value = numquery;
+            document.getElementById('imgbase64').value = cropper.getCroppedCanvas().toDataURL("image/png");
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/cropper.min.js') }}"></script>
+</body>
+
+</html>

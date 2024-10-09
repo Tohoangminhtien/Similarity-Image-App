@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPLOAD IMAGE FORM</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        h1 {
+            color: #1a73e8;
+        }
+
+        h2 {
+            color: #70757a;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        input[type="file"], input[type="submit"] {
+            margin-top: 10px;
+            padding: 10px;
+            border: none;
+            background-color: #1a73e8;
+            color: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0b59b6;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>UPLOAD IMAGE FORM</h1>
+        <h2>{{notification}}</h2>
+        <form action="upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx">
+            <input type="submit" value="Update">
+        </form>
+
+        <form action="delete" method="post">
+            <input type="submit" value="Delete">
+        </form>
+    </div>
+</body>
+
+</html>
